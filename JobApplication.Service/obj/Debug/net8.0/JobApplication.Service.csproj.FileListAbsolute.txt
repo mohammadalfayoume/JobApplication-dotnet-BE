@@ -1,0 +1,17 @@
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Service.deps.json
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Service.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Service.pdb
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Data.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Entity.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Data.pdb
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Entity.pdb
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.csproj.AssemblyReference.cache
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.AssemblyInfoInputs.cache
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.AssemblyInfo.cs
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.csproj.CoreCompileInputs.cache
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.csproj.CopyComplete
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\refint\JobApplication.Service.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.pdb
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\ref\JobApplication.Service.dll

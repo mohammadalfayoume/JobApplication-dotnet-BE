@@ -1,0 +1,12 @@
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\bin\Debug\net8.0\JobApplication.Entity.deps.json
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\bin\Debug\net8.0\JobApplication.Entity.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\bin\Debug\net8.0\JobApplication.Entity.pdb
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.AssemblyInfoInputs.cache
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.AssemblyInfo.cs
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.csproj.CoreCompileInputs.cache
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\refint\JobApplication.Entity.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.pdb
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\ref\JobApplication.Entity.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.csproj.AssemblyReference.cache
