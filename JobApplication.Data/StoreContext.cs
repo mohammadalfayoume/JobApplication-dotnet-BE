@@ -1,5 +1,6 @@
 ﻿using JobApplication.Data.Seed;
 using JobApplication.Entity.Entities;
+using JobApplication.Entity.Lookups;
 using Microsoft.EntityFrameworkCore;
 using File = JobApplication.Entity.Entities.File;
 
@@ -16,6 +17,7 @@ public class StoreContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.RoleSeedData();
+        modelBuilder.JobTypeData();
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(StoreContext).Assembly);
     }
@@ -23,10 +25,15 @@ public class StoreContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Company> Companies { get; set; }
-    public DbSet<JobSeeker> JobSeekers{ get; set; }
+    public DbSet<CompanyProfile> Companies { get; set; }
+    public DbSet<JobSeekerProfile> JobSeekers{ get; set; }
     public DbSet<File> Files { get; set; }
-    public DbSet<JobSeekerFile> JobSeekerFiles { get; set; }
     public DbSet<Application> Applications { get; set; }
+    public DbSet<Job> Jobs { get; set; }
+    public DbSet<Skill> Skills { get; set; }
+    public DbSet<CountryLookup> Countries { get; set; }
+    public DbSet<CityLookup> Cities { get; set; }
+    public DbSet<JobTypeLookup> JobTypes { get; set; }
+
 
 }

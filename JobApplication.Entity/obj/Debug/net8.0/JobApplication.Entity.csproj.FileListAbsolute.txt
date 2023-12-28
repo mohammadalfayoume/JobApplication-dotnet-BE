@@ -10,3 +10,4 @@ C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debu
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.pdb
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\ref\JobApplication.Entity.dll
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.csproj.AssemblyReference.cache
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.sourcelink.json

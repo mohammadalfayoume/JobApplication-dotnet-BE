@@ -2,8 +2,10 @@
 
 namespace JobApplication.Entity.Lookups
 {
-    public class BaseLookup : BaseEntity
+    public class BaseLookup
     {
-        public string Value { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
+
 }

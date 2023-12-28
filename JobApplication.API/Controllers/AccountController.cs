@@ -46,6 +46,12 @@ namespace JobApplication.API.Controllers
         {
             return new ApiResponse<string>(200);
         }
+        //[HttpGet]
+        //public async Task<string> SeedCountriesAndCities()
+        //{
+        //    await CurrentService.SeedCountriesCitiesData();
+        //    return "Done";
+        //}
 
     }
 }

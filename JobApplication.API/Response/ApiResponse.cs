@@ -16,11 +16,6 @@ public class ApiResponse<T>
         Message = message ?? GetDefaultMessageForStatusCode(statusCode);
     }
 
-    public ApiResponse(int statusCode = 200)
-    {
-        StatusCode = statusCode;
-    }
-
 
     public T Data { get; }
 
@@ -41,4 +36,11 @@ public class ApiResponse<T>
         };
     }
 
+}
+
+public class ApiResponse : ApiResponse<object>
+{
+    public ApiResponse(object data = default, int statusCode = 200, string message = null) : base(data, statusCode, message)
+    {
+    }
 }

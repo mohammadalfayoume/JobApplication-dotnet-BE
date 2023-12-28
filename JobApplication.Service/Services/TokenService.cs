@@ -1,5 +1,6 @@
 ﻿using JobApplication.Entity.Entities;
 using JobApplication.Entity.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,8 +22,7 @@ public class TokenService : JobApplicationBaseService
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.UserName),
-                new Claim(ClaimTypes.Role, string.Join(",", user.UserRoles.Select(x => x.RoleId)))
+                new Claim(ClaimTypes.Role, string.Join(",", user.UserRoles.Select(x => x.Role.Name)))
             };
         var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
         var tokenDescriptor = new SecurityTokenDescriptor

@@ -143,3 +143,10 @@ C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\n
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\Mapster.dll
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\Mapster.Core.dll
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\obj\Debug\net8.0\JobApplication.API.sourcelink.json
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\Firebase.Auth.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\Firebase.Storage.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\System.ServiceModel.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\JobApplication.Integration.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.API\bin\Debug\net8.0\JobApplication.Integration.pdb

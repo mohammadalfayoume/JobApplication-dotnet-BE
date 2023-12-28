@@ -15,3 +15,6 @@ C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Deb
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\refint\JobApplication.Service.dll
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.pdb
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\ref\JobApplication.Service.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\obj\Debug\net8.0\JobApplication.Service.sourcelink.json
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Integration.dll
+C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Service\bin\Debug\net8.0\JobApplication.Integration.pdb

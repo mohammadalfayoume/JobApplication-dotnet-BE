@@ -12,12 +12,13 @@ public static class RoleSeed
             new Role
             {
                 Id = (int)RoleEnum.JobSeeker,
-                UpdatedDate = DateTime.Now.Date
+                Name = "JobSeeker"
+                
             },
             new Role
             {
                 Id = (int)RoleEnum.Company,
-                UpdatedDate = DateTime.Now.Date
+                Name = "Company"
             }
             );
     }

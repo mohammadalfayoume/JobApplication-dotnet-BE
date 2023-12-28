@@ -1,9 +1,14 @@
-﻿using JobApplication.Entity.Dtos.AccountDtos;
+﻿using JobApplication.Entity.Dtos;
+using JobApplication.Entity.Dtos.AccountDtos;
 using JobApplication.Entity.Entities;
+using JobApplication.Entity.Enums;
+using JobApplication.Entity.Lookups;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace JobApplication.Service.Services;
 
@@ -14,7 +19,7 @@ public class AccountService : JobApplicationBaseService
     {
         _tokenService = serviceProvider.GetRequiredService<TokenService>();
     }
-    
+    // Done
     public async Task<UserDto> RegisterAsync(RegisterDto registerDto)
     {
         using (var transaction = await DbContext.Database.BeginTransactionAsync())
@@ -29,30 +34,42 @@ public class AccountService : JobApplicationBaseService
                 if (registerDto.Password != registerDto.ConfirmPassword)
                     throw new ExceptionService(400, "Password and ConfirmPassword does not match");
 
-        
-                var user = new RegisterUserFactory().CreateUser(registerDto.Role);
-                registerDto.Adapt(user);
-        
-
+                var user = registerDto.Adapt<User>();
                 await DbContext.AddAsync(user);
-
                 await DbContext.SaveChangesAsync();
 
                 await DbContext.UserRoles.AddAsync(new UserRole
                 {
-                    RoleId = (int)registerDto.Role,
+                    RoleId = registerDto.RoleId,
                     UserId = user.Id
                 });
+
                 await DbContext.SaveChangesAsync();
 
-                var token = _tokenService.GenerateToken(user);
+                // Using Factory Design Pattern
+                IProfileFactory profileFactory = new ProfileFactory();
+                var profile = profileFactory.CreateProfile((RoleEnum)registerDto.RoleId);
+                
+                profile.UserId = user.Id;
+                await DbContext.AddAsync(profile);
+                
 
-                var userToReturn = user.Adapt<UserDto>();
+                await DbContext.SaveChangesAsync();
 
-                userToReturn.Token = token;
+                var userWithRoles = DbContext.Users
+                    .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                    .FirstOrDefault(u => u.Id == user.Id);
 
+                var token = _tokenService.GenerateToken(userWithRoles);
+
+                var userDto = userWithRoles.Adapt<UserDto>();
+
+                userDto.Token = token;
+                var roles = string.Join(',', userWithRoles.UserRoles.Select(x => x.Role.Name));
+                userDto.Roles = roles;
                 await transaction.CommitAsync();
-                return userToReturn;
+                return userDto;
                 
 
             }
@@ -64,6 +81,56 @@ public class AccountService : JobApplicationBaseService
            
         }
     }
+    // Done
+    public async Task SeedCountriesCitiesData()
+    {
+        using (var transaction = await DbContext.Database.BeginTransactionAsync())
+        {
+            try
+            {
+                
+                // Get the path to the JSON file
+                string jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "countries+cities.json");
+
+                // Read the entire content of the file
+                string jsonContent = System.IO.File.ReadAllText(jsonFilePath);
+
+                // Deserialize JSON content to a list of Person objects
+                //List<Person> people = JsonSerializer.Deserialize<List<Person>>(jsonContent);
+                // Deserialize JSON content to a list of CountryDto objects
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                List<CountryDto> countries = JsonSerializer.Deserialize<List<CountryDto>>(jsonContent, options);
+
+                // Seed the database with countries and cities
+                //foreach (var country in countries)
+                for (int i = 0; i < 11; i++)
+                {
+                    // Seed country
+                    var countryEntity = new CountryLookup { Name = countries[i].Name };
+                    await DbContext.AddAsync(countryEntity);
+                    await DbContext.SaveChangesAsync();
+
+                    // Seed cities with the associated country
+                    //foreach (var city in countries[i].Cities)
+                    //{
+                    //    var cityEntity = new CityLookup { Name = city.Name, CountryId = countryEntity.Id };
+                    //    await DbContext.Cities.AddAsync(cityEntity);
+                    //    await DbContext.SaveChangesAsync();
+                    //}
+                }
+                //await DbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch (ExceptionService ex)
+            {
+                await transaction.RollbackAsync();
+                throw ex;
+            }
+
+            // Optionally, you can redirect to a view or return a response
+        }
+        }
+    // Done
     public async Task<UserDto> LoginAsync(LoginDto loginDto)
     {
         using (var transaction = await DbContext.Database.BeginTransactionAsync())
@@ -73,21 +140,21 @@ public class AccountService : JobApplicationBaseService
                 var user = await DbContext.Users.Select(x => new User
                 {
                     Email = x.Email,
-                    UserName = x.UserName,
-                    UserRoles = x.UserRoles,
+                    UserRoles = x.UserRoles.Select(x => new UserRole { Role = x.Role, RoleId = x.RoleId}).ToList(),
                     Id = x.Id,
                     Password = x.Password
                 }).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
-                
+
                 if (user is null)
                     throw new ExceptionService(400, "User Does Not Exist");
                 if (user.Password != loginDto.Password)
                     throw new ExceptionService(400, "Incorrect Password");
 
                 var token = _tokenService.GenerateToken(user);
-
+                var roles = string.Join(',', user.UserRoles.Select(x => x.Role.Name));
                 var userDto = user.Adapt<UserDto>();
                 userDto.Token = token;
+                userDto.Roles = roles;
                 return userDto;
 
             }
@@ -96,13 +163,8 @@ public class AccountService : JobApplicationBaseService
                 await transaction.RollbackAsync();
                 throw ex;
             }
-           
+
         }
     }
 
-    private async Task<bool> CheckPassword(string email, string password)
-    {
-        return await DbContext.Users.AnyAsync(x => x.Email == email && 
-        x.Password == password);
-    }
 }

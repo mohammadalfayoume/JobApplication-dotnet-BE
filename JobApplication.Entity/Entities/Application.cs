@@ -2,10 +2,8 @@
 
 public class Application : BaseEntity
 {
-    public DateTime AppliedAt { get; set; }
-    public bool IsApplied { get; set; }
-    public JobSeeker JobSeeker { get; set; }
-    public int JobSeekerId { get; set; }
-    public Company Company { get; set; }
-    public int CompanyId { get; set;}
+    public JobSeekerProfile JobSeekerProfile { get; set; }
+    public int JobSeekerProfileId { get; set; }
+    public Job Job { get; set; }
+    public int JobId { get; set; }
 }

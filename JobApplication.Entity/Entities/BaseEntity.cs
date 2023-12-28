@@ -3,8 +3,8 @@
 public class BaseEntity
 {
     public int Id { get; set; }
-    public DateTime CreationDate { get; } = DateTime.Now.Date;
+    public DateTime CreationDate { get; set; }
     public DateTime UpdatedDate { get; set; }
-    public int CreatedBy { get; set; }
-    public int UpdatedBy { get; set;}
+    public int CreatedById { get; set; }
+    public int UpdatedById { get; set;}
 }

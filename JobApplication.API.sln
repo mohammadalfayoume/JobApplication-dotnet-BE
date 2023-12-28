@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobApplication.API", "JobApplication.API\JobApplication.API.csproj", "{453E8B1F-63FB-45B1-97E8-EFC499D9390D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApplication.API", "JobApplication.API\JobApplication.API.csproj", "{453E8B1F-63FB-45B1-97E8-EFC499D9390D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobApplication.Service", "JobApplication.Service\JobApplication.Service.csproj", "{E82D9117-7714-4AAF-8944-6D10335468A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApplication.Service", "JobApplication.Service\JobApplication.Service.csproj", "{E82D9117-7714-4AAF-8944-6D10335468A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobApplication.Data", "JobApplication.Data\JobApplication.Data.csproj", "{44F118AE-FF7A-4B5A-B2E9-BC129D94C4CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApplication.Data", "JobApplication.Data\JobApplication.Data.csproj", "{44F118AE-FF7A-4B5A-B2E9-BC129D94C4CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobApplication.Entity", "JobApplication.Entity\JobApplication.Entity.csproj", "{F4284DD2-738B-4275-AD02-168F0EC2F367}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApplication.Entity", "JobApplication.Entity\JobApplication.Entity.csproj", "{F4284DD2-738B-4275-AD02-168F0EC2F367}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobApplication.Integration", "JobApplication.Integration\JobApplication.Integration.csproj", "{59940DF7-161C-414C-BAF1-78331F9B1165}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F4284DD2-738B-4275-AD02-168F0EC2F367}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4284DD2-738B-4275-AD02-168F0EC2F367}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4284DD2-738B-4275-AD02-168F0EC2F367}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59940DF7-161C-414C-BAF1-78331F9B1165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59940DF7-161C-414C-BAF1-78331F9B1165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59940DF7-161C-414C-BAF1-78331F9B1165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59940DF7-161C-414C-BAF1-78331F9B1165}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
