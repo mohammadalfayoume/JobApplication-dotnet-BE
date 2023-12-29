@@ -18,6 +18,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // Register Services
 builder.Services.AddDbContextService(builder.Configuration);
 builder.Services.AddJobApplicationServices();

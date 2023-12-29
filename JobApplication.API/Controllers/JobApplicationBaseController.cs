@@ -1,4 +1,4 @@
-﻿using JobApplication.Data;
+﻿ using JobApplication.Data;
 using JobApplication.Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

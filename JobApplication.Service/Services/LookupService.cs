@@ -14,7 +14,7 @@ public class LookupService : JobApplicationBaseService
     public LookupService(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
-
+    // Done
     public async Task<IEnumerable<CityDto>> GetCountryCitiesAsync(int countryId)
     {
 
@@ -25,7 +25,7 @@ public class LookupService : JobApplicationBaseService
 
         return cities.Adapt<IEnumerable<CityDto>>();
     }
-
+    // Done
     public async Task<IEnumerable<LookupDto>> GetLookupDataAsync(LookupTypeEnum lookupType)
     {
         IEnumerable<BaseLookup> lookupData = lookupType switch
@@ -33,7 +33,7 @@ public class LookupService : JobApplicationBaseService
             LookupTypeEnum.JobTypeEnum => await DbContext.JobTypes.ToListAsync(),
             LookupTypeEnum.CountryEnum => await DbContext.Countries.ToListAsync(),
             LookupTypeEnum.RoleEnum => await DbContext.Roles.ToListAsync(),
-            _ => throw new NotImplementedException()
+            _ => throw new ExceptionService(400, "Invalid Lookup Type")
         };
 
         var result = lookupData.Select(x => new LookupDto { Id = x.Id, Name = x.Name });

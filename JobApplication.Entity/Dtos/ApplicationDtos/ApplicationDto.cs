@@ -8,8 +8,8 @@ namespace JobApplication.Entity.Dtos.ApplicationDtos;
 public class ApplicationDto
 {
     public int Id { get; set; }
-    public DateTime AppliedAt { get; set; }
-    public bool IsApplied { get; set; }
-    public JobSeekerFileDto JobSeekerFile { get; set; }
-    //public JobsDto Job { get; set; }
+    public JobSeekerDto JobSeekerProfile { get; set; }
+    public int JobSeekerProfileId { get; set; }
+    public JobsDto Job { get; set; }
+    public int JobId { get; set; }
 }

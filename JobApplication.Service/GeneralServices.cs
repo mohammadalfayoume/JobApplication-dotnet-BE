@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using JobApplication.Service.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace JobApplication.Service;
 

@@ -1,6 +1,9 @@
-﻿using JobApplication.API.Response;
+﻿using JobApplication.API.Filters;
+using JobApplication.API.Response;
 using JobApplication.Entity.Dtos.CompanyDtos;
+using JobApplication.Entity.Enums;
 using JobApplication.Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +17,8 @@ public class CompanyController : JobApplicationBaseController<CompanyService>
     {
     }
     [HttpPost]
-    public async Task<ApiResponse> CreateUpdateProfile([FromForm] UpdateCompanyProfileDto companyProfile)
+    [AuthorizationFilter(RoleEnum.Company)]
+    public async Task<ApiResponse> UpdateCompanyProfile([FromForm] UpdateCompanyProfileDto companyProfile)
     {
         if (companyProfile is null)
             throw new ExceptionService(400, "Invalid Model Data");
@@ -25,6 +29,7 @@ public class CompanyController : JobApplicationBaseController<CompanyService>
 
     }
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ApiResponse<IEnumerable<CompanyDto>>> GetAllCompanies()
     {
         var companies = await CurrentService.GetAllCompaniesAsync();

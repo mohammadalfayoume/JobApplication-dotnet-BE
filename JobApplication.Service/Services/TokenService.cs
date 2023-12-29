@@ -16,6 +16,7 @@ public class TokenService : JobApplicationBaseService
     {
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"]));
     }
+    // Done
     public string GenerateToken(User user)
     {
         var claims = new List<Claim>

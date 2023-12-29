@@ -6,11 +6,7 @@ namespace JobApplication.Entity.Dtos.ApplicationDtos;
 
 public class CreateUpdateApplicationDto
 {
-    public int Id { get; set; }
-    [Required]
+    public int? Id { get; set; }
     public int JobId { get; set; }
-    [Required]
-    public int JobSeekerId { get; set; }
-    [Required]
     public IFormFile File { get; set; }
 }

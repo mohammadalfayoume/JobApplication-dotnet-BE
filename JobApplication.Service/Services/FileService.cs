@@ -1,7 +1,9 @@
 ﻿
 using Firebase.Auth;
 using Firebase.Storage;
+using JobApplication.Entity.Dtos.FileDtos;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JobApplication.Service.Services;
 
@@ -11,6 +13,7 @@ public class FileService : JobApplicationBaseService
     private readonly string _bucket;
     private readonly string _authEmail;
     private readonly string _authPassword;
+    private readonly UserService _userService;
     private static string[] _acceptedExtensions = { ".jpg", ".jpeg", ".png", ".pdf" };
     public FileService(IServiceProvider serviceProvider, IConfiguration config) : base(serviceProvider)
     {
@@ -18,7 +21,9 @@ public class FileService : JobApplicationBaseService
         _bucket = config["Firebase:Bucket"];
         _authEmail = config["Firebase:AuthEmail"];
         _authPassword = config["Firebase:AuthPassword"];
+        _userService = serviceProvider.GetRequiredService<UserService>();
     }
+    // Firebase File Services
     public async Task<string> UploadFileAsync(Stream fileStream, string filePath)
     {
         string fileExtension = Path.GetExtension(filePath);
@@ -107,5 +112,69 @@ public class FileService : JobApplicationBaseService
             Console.WriteLine("Exception was thrown: {0}", ex);
             throw; // Re-throw the exception to propagate it to the caller
         }
+    }
+
+    // Local File Services
+    // Done
+    public async Task UpdateFileAsync(CreateUpdateDeleteFileDto fileToUpdate)
+    {
+        var userId = (int)_userService.GetUserId();
+        var profilePicFile = await DbContext.Files.FindAsync(fileToUpdate.Id);
+        if (profilePicFile is null)
+            throw new ExceptionService(400, "Invalid ProfilePictureFileId");
+
+        DeleteFile(profilePicFile.Path);
+
+        profilePicFile.Path = fileToUpdate.Path;
+        profilePicFile.FileName = fileToUpdate.FileName;
+        profilePicFile.UpdatedDate = DateTime.Now.Date;
+        profilePicFile.UpdatedById = userId;
+
+        DbContext.Update(profilePicFile);
+        await DbContext.SaveChangesAsync();
+
+        string currentDirectory = Directory.GetCurrentDirectory();
+
+        var pathToSave = Path.Combine(currentDirectory, fileToUpdate.Path);
+        Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
+        await using var fileStream = new FileStream(pathToSave, FileMode.Create);
+        await fileToUpdate.File.CopyToAsync(fileStream);
+    }
+    // Done
+    public void DeleteFile(string path)
+    {
+        string currentDirectory = Directory.GetCurrentDirectory();
+        var pathToDelete = Path.Combine(currentDirectory, path);
+
+        if (File.Exists(pathToDelete))
+        {
+            File.Delete(pathToDelete);
+        }
+    }
+    // Done
+    public async Task<Entity.Entities.File> CreateFileAsync(CreateUpdateDeleteFileDto file)
+    {
+        var userId = (int)_userService.GetUserId();
+        var fileToCreate = new Entity.Entities.File
+        {
+            FileName = file.FileName,
+            FileId = file.FileId,
+            Path = file.Path,
+            CreatedById = userId,
+            CreationDate = DateTime.Now.Date
+        };
+        // Save File in the DB
+        await DbContext.Files.AddAsync(fileToCreate);
+        await DbContext.SaveChangesAsync();
+
+        // Save File Locally
+        string currentDirectory = Directory.GetCurrentDirectory();
+        var pathToSave = Path.Combine(currentDirectory, file.Path);
+        Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
+
+        await using var fileStream = new FileStream(pathToSave, FileMode.Create);
+        await file.File.CopyToAsync(fileStream);
+
+        return fileToCreate;
     }
 }

@@ -1,55 +1,137 @@
-﻿
-using JobApplication.Entity.Dtos.CompanyDtos;
+﻿using JobApplication.Entity.Dtos.FileDtos;
 using JobApplication.Entity.Dtos.JobSeekerDtos;
+using JobApplication.Entity.Dtos.SkillDtos;
 using JobApplication.Entity.Entities;
-using JobApplication.Entity.Enums;
-using JobApplication.Integration.FirebaseServices;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.ComponentModel.Design;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using File = JobApplication.Entity.Entities.File;
 
 namespace JobApplication.Service.Services;
 
 public class JobSeekerService : JobApplicationBaseService
 {
-    private readonly FileService _firebaseService;
+    private readonly FileService _fileService;
+    private readonly UserService _userService;
     public JobSeekerService(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _firebaseService = serviceProvider.GetRequiredService<FileService>();
+        _fileService = serviceProvider.GetRequiredService<FileService>();
+        _userService = serviceProvider.GetRequiredService<UserService>();
     }
-
+    // Done
     public async Task<JobSeekerDto> GetJobSeekerAsync(int jobSeekerId)
     {
-        var jobSeeker = await DbContext.JobSeekers.Where(x => x.Id == jobSeekerId).SingleOrDefaultAsync();
+        var jobSeeker = await DbContext.JobSeekers
+            .Where(x => x.Id == jobSeekerId)
+            .Include(x => x.Skills)
+            .Include(x => x.ProfilePictureFile)
+            .Include(x => x.ResumeFile)
+            .FirstOrDefaultAsync();
         return jobSeeker.Adapt<JobSeekerDto>();
     }
-
+    // Done
     public async Task UpdateJobSeekerProfileAsync(UpdateJobSeekerProfileDto jobSeekerProfile)
     {
         using (var transaction = await DbContext.Database.BeginTransactionAsync())
         {
             try
             {
-                var jobseeker = await DbContext.JobSeekers.FindAsync(jobSeekerProfile.Id);
+                var userId = (int)_userService.GetUserId();
+                var jobseeker = await DbContext.JobSeekers.Include(x => x.Skills).FirstOrDefaultAsync(x => x.Id == jobSeekerProfile.Id);
                 if (jobseeker == null)
                     throw new ExceptionService(400, "Company Does Not Exist");
-                var imagePath = string.Empty;
-                if (jobSeekerProfile.Logo is not null)
+
+                jobseeker.CityId = jobSeekerProfile.CityId;
+                jobseeker.CountryId = jobSeekerProfile.CountryId;
+                jobseeker.FirstName = jobSeekerProfile.FirstName;
+                jobseeker.LastName = jobSeekerProfile.LastName;
+                jobseeker.Summary = jobSeekerProfile.Summary;
+                jobseeker.GraduationDate = jobSeekerProfile.GraduationDate;
+                jobseeker.UniversityName = jobSeekerProfile.UniversityName;
+                jobseeker.IsFresh = jobSeekerProfile.IsFresh;
+                jobseeker.Grade = jobSeekerProfile.Grade;
+                jobseeker.UpdatedDate = DateTime.Now.Date;
+                jobseeker.UpdatedById = userId;
+
+                var skills = await CreateUpdateSkillsAsync(jobSeekerProfile.Skills);
+
+                jobseeker.Skills = skills;
+
+
+                if (jobSeekerProfile.ProfilePictureFile is not null)
                 {
-                    imagePath = await ImageProcessing(jobseeker.Id, jobSeekerProfile);
+                    // Create File
+                    if (jobseeker.ProfilePictureFileId is null)
+                    {
+                        var fileId = Guid.NewGuid().ToString();
+                        var fileName = jobSeekerProfile.ProfilePictureFile.FileName;
+                        var path = $"jobApplicationFiles/jobseeker_{jobSeekerProfile.Id}/profilePicture/{fileId}_{fileName}";
+                        var createFileDto = new CreateUpdateDeleteFileDto
+                        {
+                            FileId = fileId,
+                            FileName = fileName,
+                            Path = path,
+                            File = jobSeekerProfile.ProfilePictureFile
+                        };
+                        var fileCreated = await _fileService.CreateFileAsync(createFileDto);
+                        jobseeker.ProfilePictureFileId = fileCreated.Id;
+                    }
+                    // Update File
+                    else
+                    {
+                        var fileId = jobseeker.ProfilePictureFile.FileId;
+                        var fileName = jobSeekerProfile.ProfilePictureFile.FileName;
+                        var newFilePath = $"jobApplicationFiles/jobseeker_{jobSeekerProfile.Id}/profilePictures/{fileId}_{fileName}";
 
+                        var fileToUpdate = new CreateUpdateDeleteFileDto
+                        {
+                            Id = jobseeker.ProfilePictureFileId,
+                            Path = newFilePath,
+                            FileName = fileName,
+                            FileId = fileId,
+                            File = jobSeekerProfile.ProfilePictureFile
+                        };
+                        await _fileService.UpdateFileAsync(fileToUpdate);
+                    }
                 }
-                jobSeekerProfile.Adapt(jobseeker);
 
-                //if (!string.IsNullOrEmpty(imagePath))
-                //    jobseeker.LogoUrl = imagePath;
+                if (jobSeekerProfile.ResumeFile is not null)
+                {
+                    // Create File
+                    if (jobseeker.ResumeFileId is null)
+                    {
+                        var fileId = Guid.NewGuid().ToString();
+                        var fileName = jobSeekerProfile.ResumeFile.FileName;
+                        var path = $"jobApplicationFiles/jobseeker_{jobSeekerProfile.Id}/resumes/{fileId}_{fileName}";
+                        var createFileDto = new CreateUpdateDeleteFileDto
+                        {
+                            FileId = fileId,
+                            FileName = fileName,
+                            Path = path,
+                            File = jobSeekerProfile.ResumeFile
+                        };
+                        var fileCreated = await _fileService.CreateFileAsync(createFileDto);
+                        jobseeker.ResumeFileId = fileCreated.Id;
+                    }
+                    // Update File
+                    else
+                    {
+                        var fileId = jobseeker.ResumeFile.FileId;
+                        var fileName = jobSeekerProfile.ResumeFile.FileName;
+                        var newFilePath = $"jobApplicationFiles/jobseeker_{jobSeekerProfile.Id}/resumes/{fileId}_{fileName}";
 
-               
-                jobSeekerProfile.Adapt(jobseeker);
-                DbContext.Update(jobseeker);
+                        var fileToUpdate = new CreateUpdateDeleteFileDto
+                        {
+                            Id = jobseeker.ResumeFileId,
+                            Path = newFilePath,
+                            FileName = fileName,
+                            FileId = fileId,
+                            File = jobSeekerProfile.ResumeFile
+                        };
+                        await _fileService.UpdateFileAsync(fileToUpdate);
+                    }
+                }
+                
+                DbContext.JobSeekers.Update(jobseeker);
                 await DbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
@@ -61,71 +143,36 @@ public class JobSeekerService : JobApplicationBaseService
 
         }
     }
-
-    private async Task<string> ImageProcessing(int jobSeekerId, UpdateJobSeekerProfileDto jobSeekerProfile)
+    // Done
+    private async Task<List<Skill>> CreateUpdateSkillsAsync(List<SkillDto> skills)
     {
-        //var fileName = jobSeekerProfile.Logo.FileName;
-        //var fileId = Guid.NewGuid().ToString();
-        //// Specify the local directory to store files
-        //string currentDirectory = Directory.GetCurrentDirectory();
-        //// Combine the local directory with the file path
-        //var filePath = Path.Combine(currentDirectory, "profileImgs", "jobSeeker_" + jobSeekerId, "logo", fileId + $"_{fileName}");
-        //// Create the local directory if it doesn't exist
-        //Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-        //var file = new File
-        //{
-        //    FileName = jobSeekerProfile.Logo.FileName,
-        //    FileSize = jobSeekerProfile.Logo.Length,
-        //    FileType = jobSeekerProfile.Logo.ContentType,
-        //    FileId = fileId,
-        //    Path = $"profileImgs/jobseeker_{jobSeekerId}/logo/{fileId}_{fileName}"
-        //};
-        //var jobseekerFilee = await DbContext.JobSeekerFiles.Include(x => x.File).FirstOrDefaultAsync(x => x.JobSeekerId == jobSeekerProfile.Id && x.FileType == JobSeekerFileTypeEnum.Logo);
+        var userId = (int)_userService.GetUserId();
+        var skillsToReturn = new List<Skill>();
+        foreach (var skill in skills)
+        {
 
-        //if (jobseekerFilee != null)
-        //{
-        //    var filePathToDelete = Path.Combine(currentDirectory, "profileImags", jobseekerFilee.File.Path);
-        //    // Delete the previous local file
-        //    if (System.IO.File.Exists(filePathToDelete))
-        //    {
-        //        System.IO.File.Delete(filePathToDelete);
-        //    }
-
-        //    jobseekerFilee.File = file;
-        //    jobseekerFilee.FileType = JobSeekerFileTypeEnum.Logo;
-        //    DbContext.Update(jobseekerFilee);
-        //    await DbContext.SaveChangesAsync();
-        //    // await _firebaseService.DeleteFileAsync(filePathToDelete);
-        //}
-        //else
-        //{
-
-        //    await DbContext.Files.AddAsync(file);
-        //    await DbContext.SaveChangesAsync();
-        //    var jobseekerFile = new JobSeekerFile
-        //    {
-        //        FileId = file.Id,
-        //        JobSeekerId = jobSeekerProfile.Id,
-        //    };
-
-        //    await DbContext.JobSeekerFiles.AddAsync(jobseekerFile);
-        //    await DbContext.SaveChangesAsync();
-        //}
-
-
-        //await using var fileStream = new FileStream(filePath, FileMode.Create);
-        //await jobSeekerProfile.Logo.CopyToAsync(fileStream);
-        //return file.Path;
-        // Process the file
-        //await using var memoryStr = new MemoryStream();
-        //await jobSeekerProfile.Logo.CopyToAsync(memoryStr);
-
-
-        return "ssss";
-        // Reset the position of the stream to the beginning
-        //memoryStr.Seek(0, SeekOrigin.Begin);
-        // Upload logo into firebase
-
-        //string link = await _firebaseService.UploadFileAsync(memoryStr, file.Path);
+            if (skill.Id is null)
+            {
+                var skillToAdd = skill.Adapt<Skill>();
+                skillToAdd.CreationDate = DateTime.Now.Date;
+                skillToAdd.CreatedById = userId;
+                await DbContext.AddAsync(skillToAdd);
+                await DbContext.SaveChangesAsync();
+                skillsToReturn.Add(skillToAdd);
+            }
+            else
+            {
+                var existancSkill = await DbContext.Skills.FindAsync(skill.Id);
+                if (skill is null)
+                    throw new ExceptionService(400, $"Skill Not Found To Update");
+                skill.Adapt(existancSkill);
+                existancSkill.UpdatedDate = DateTime.Now.Date;
+                existancSkill.UpdatedById = userId;
+                DbContext.Update(existancSkill);
+                skillsToReturn.Add(existancSkill);
+            }
+        }
+        return skillsToReturn;
     }
+
 }

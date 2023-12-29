@@ -1,40 +1,93 @@
 ﻿
 using JobApplication.Entity.Dtos.ApplicationDtos;
+using JobApplication.Entity.Dtos.FileDtos;
 using JobApplication.Entity.Entities;
-using JobApplication.Entity.Enums;
 using Mapster;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualBasic.FileIO;
-using System.IO;
-using File = JobApplication.Entity.Entities.File;
 
 namespace JobApplication.Service.Services;
 
 public class ApplicationService : JobApplicationBaseService
 {
-    private readonly FileService _firebaseService;
+    private readonly FileService _fileService;
+    private readonly UserService _userService;
 
     public ApplicationService(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _firebaseService = serviceProvider.GetRequiredService<FileService>();
+        _fileService = serviceProvider.GetRequiredService<FileService>();
+        _userService = serviceProvider.GetRequiredService<UserService>();
     }
-    public async Task ApplyToJobAsync(CreateUpdateApplicationDto applicationDto)
+    public async Task CreateUpdateApplicationAsync(CreateUpdateApplicationDto applicationDto)
     {
         using (var transaction = await DbContext.Database.BeginTransactionAsync())
         {
             try
             {
+                var userId = (int)_userService.GetUserId();
                 
                 if (applicationDto.Id == 0)
                 {
-                    await Apply(applicationDto);
+                    if (applicationDto.File is null)
+                    {
+                        var applicationToAdd = applicationDto.Adapt<Application>();
+                        applicationToAdd.JobSeekerProfileId = userId;
+                        applicationToAdd.CreatedById = userId;
+                        applicationToAdd.CreationDate = DateTime.Now.Date;
+                        await DbContext.Applications.AddAsync(applicationToAdd);
+                    }
+                    else
+                    {
+                        
+                        var jobseekerProfile = await DbContext.JobSeekers
+                            .Include(x => x.ResumeFile)
+                            .Where(x => x.Id == userId)
+                            .FirstOrDefaultAsync();
+
+                        await CreateUpdateFileAsync(jobseekerProfile, applicationDto);
+                        
+                        var applicationToCreate = applicationDto.Adapt<Application>();
+
+                        applicationToCreate.JobSeekerProfileId = userId;
+                        applicationToCreate.CreatedById = userId;
+                        applicationToCreate.CreationDate = DateTime.Now.Date;
+
+                        await DbContext.Applications.AddAsync(applicationToCreate);
+                        await DbContext.SaveChangesAsync();
+                    }
+                    
                 }
                 else
                 {
-                    await ReApply(applicationDto);
+                    if (applicationDto.File is null)
+                    {
+                        var applicationToUpdate = applicationDto.Adapt<Application>();
+                        applicationToUpdate.JobSeekerProfileId = userId;
+                        applicationToUpdate.UpdatedById = userId;
+                        applicationToUpdate.UpdatedDate = DateTime.Now.Date;
+
+                        DbContext.Applications.Update(applicationToUpdate);
+                    }
+                    else
+                    {
+
+                        var jobseekerProfile = await DbContext.JobSeekers
+                            .Include(x => x.ResumeFile)
+                            .Where(x => x.Id == userId)
+                            .FirstOrDefaultAsync();
+
+                        await CreateUpdateFileAsync(jobseekerProfile, applicationDto);
+
+                        var applicationToUpdate = applicationDto.Adapt<Application>();
+                        applicationToUpdate.JobSeekerProfileId = userId;
+                        applicationToUpdate.UpdatedById = userId;
+                        applicationToUpdate.UpdatedDate = DateTime.Now.Date;
+
+                        DbContext.Applications.Update(applicationToUpdate);
+                        
+                    }
                 }
+                await DbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
             catch (ExceptionService ex)
@@ -46,131 +99,72 @@ public class ApplicationService : JobApplicationBaseService
 
     }
 
-    private async Task ReApply(CreateUpdateApplicationDto applicationDto)
+    private async Task CreateUpdateFileAsync(JobSeekerProfile jobseekerProfile, CreateUpdateApplicationDto applicationDto)
     {
-    //    string currentDirectory = Directory.GetCurrentDirectory();
-    //    var application = await DbContext.Applications.FindAsync(applicationDto.Id);
-    //    if (application is null)
-    //        throw new ExceptionService(400, "Application Does Not Exist");
+        var userId = (int)_userService.GetUserId();
+        if (jobseekerProfile.ResumeFileId is null)
+        {
+            var fileId = Guid.NewGuid().ToString();
+            var fileName = applicationDto.File.FileName;
+            var path = $"jobApplicationFiles/jobseeker_{jobseekerProfile.Id}/resumes/{fileId}_{fileName}";
+            var createFileDto = new CreateUpdateDeleteFileDto
+            {
+                FileId = fileId,
+                FileName = fileName,
+                Path = path,
+                File = applicationDto.File
+            };
+            var fileCreated = await _fileService.CreateFileAsync(createFileDto);
+            jobseekerProfile.ResumeFileId = fileCreated.Id;
+            
 
-    //    var jobSeekerFile = await DbContext.JobSeekerFiles.Where(x => x.Id == application.JobSeekerFileId).Include(x => x.File).FirstOrDefaultAsync();
+        }
+        // Update File
+        else
+        {
+            var fileId = jobseekerProfile.ResumeFile.FileId;
+            var fileName = applicationDto.File.FileName;
+            var newFilePath = $"jobApplicationFiles/jobseeker_{jobseekerProfile.Id}/resumes/{fileId}_{fileName}";
 
-    //    // await _firebaseService.DeleteFileAsync(jobSeekerFile.File.Path);
-
-    //    var pathToDelete = Path.Combine(currentDirectory, "applications", jobSeekerFile.File.Path);
-    //    if (System.IO.File.Exists(pathToDelete))
-    //    {
-    //        System.IO.File.Delete(pathToDelete);
-    //    }
-
-    //    var path = $"jobSeeker_{applicationDto.JobSeekerId}" + $"/job_{applicationDto.JobId}" + $"/{jobSeekerFile.File.FileId}_{applicationDto.File.FileName}";
-
-    //    jobSeekerFile.File.Path = path;
-
-    //    jobSeekerFile.File.FileName = applicationDto.File.FileName;
-
-    //    DbContext.Update(jobSeekerFile);
-    //    await DbContext.SaveChangesAsync();
-
-    //    var pathToSave = Path.Combine(currentDirectory, "applications", path);
-    //    Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
-
-    //    // Process the file
-    //    await using var fileStream = new FileStream(pathToSave, FileMode.Create);
-    //    await applicationDto.File.CopyToAsync(fileStream);
-
-    //    // Process the file
-    //    //await using var memoryStr = new MemoryStream();
-
-    //    // Reset the position of the stream to the beginning
-    //    //memoryStr.Seek(0, SeekOrigin.Begin);
-    //    // Upload logo into firebase
-
-    //    //await _firebaseService.UploadFileAsync(memoryStr, filePath);
+            var fileToUpdate = new CreateUpdateDeleteFileDto
+            {
+                Id = jobseekerProfile.ResumeFileId,
+                Path = newFilePath,
+                FileName = fileName,
+                FileId = fileId,
+                File = applicationDto.File
+            };
+            await _fileService.UpdateFileAsync(fileToUpdate);
+        }
+        jobseekerProfile.UpdatedById = userId;
+        jobseekerProfile.UpdatedDate = DateTime.Now.Date;
+        DbContext.Update(jobseekerProfile);
     }
 
-    # region
-    private async Task Apply(CreateUpdateApplicationDto applicationDto)
+
+
+
+    public async Task<IEnumerable<ApplicationDto>> GetJobApplications(int? jobId)
     {
-        //string currentDirectory = Directory.GetCurrentDirectory();
-        //var file = CreateFile(applicationDto.File);
+        var jobApplications = await DbContext.Applications
+            .Where(x => x.JobId == jobId)
+            .Include(x => x.JobSeekerProfile)
+            .ThenInclude(x => x.ResumeFile)
+            .AsNoTracking().ToListAsync();
 
-        //var path = $"jobSeeker_{applicationDto.JobSeekerId}" + $"/job_{applicationDto.JobId}" + $"/{file.FileId}_{file.FileName}";
-        //file.Path = path;
+        return jobApplications.Adapt<IEnumerable<ApplicationDto>>();
 
-        //await DbContext.Files.AddAsync(file);
-        //await DbContext.SaveChangesAsync();
-
-        //var jobseekerFile = new JobSeekerFile
-        //{
-        //    JobSeekerId = applicationDto.JobSeekerId,
-        //    FileId = file.Id,
-        //    FileType = JobSeekerFileTypeEnum.Application
-        //};
-
-        //await DbContext.JobSeekerFiles.AddAsync(jobseekerFile);
-        //await DbContext.SaveChangesAsync();
-
-        //var application = new Application
-        //{
-        //    AppliedAt = DateTime.Now,
-        //    IsApplied = true,
-        //    JobId = applicationDto.JobId,
-        //    JobSeekerFileId = jobseekerFile.Id,
-        //};
-
-
-        //await DbContext.Applications.AddAsync(application);
-        //await DbContext.SaveChangesAsync();
-
-
-        //var pathToSave = Path.Combine(currentDirectory, "applications", path);
-        //Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
-
-        //// Process the file
-        //await using var fileStream = new FileStream(pathToSave, FileMode.Create);
-        //await applicationDto.File.CopyToAsync(fileStream);
-
-        // Process the file
-        //await using var memoryStr = new MemoryStream();
-        //await applicationDto.File.CopyToAsync(memoryStr);
-
-        // Reset the position of the stream to the beginning
-        //memoryStr.Seek(0, SeekOrigin.Begin);
-        // Upload logo into firebase
-
-        //await _firebaseService.UploadFileAsync(memoryStr, filePath);
-
-        
-        // Upload File into firebase
     }
 
-    #endregion
-
-    //public async Task<IEnumerable<ApplicationDto>> GetJobApplications(int jobId)
-    //{
-    //    var jobApplications = await DbContext.Applications
-    //        .Where(x => x.JobId == jobId)
-    //        .Include(x => x.JobSeekerFile)
-    //        .ThenInclude(x => x.File)
-    //        .AsNoTracking().ToListAsync();
-
-    //    return jobApplications.Adapt<IEnumerable<ApplicationDto>>();
-
-    //}
-
-    private File CreateFile(IFormFile file)
+    public async Task<IEnumerable<ApplicationDto>> GetJobseekerApplications(int? jobId)
     {
+        var userId = _userService.GetUserId();
 
-        //var filee = new File
-        //{
-        //    FileSize = file.Length,
-        //    FileType = file.ContentType,
-        //    FileName = file.FileName,
-        //    FileId = Guid.NewGuid().ToString()
-        //};
+        var jobApplications = await DbContext.Applications
+            .Where(x => x.JobId == jobId && x.JobSeekerProfileId == userId)
+            .AsNoTracking()
+            .ToListAsync();
 
-        var filee = new File();
-        return filee;
+        return jobApplications.Adapt<IEnumerable<ApplicationDto>>();
     }
 }

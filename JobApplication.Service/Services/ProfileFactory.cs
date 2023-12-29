@@ -3,6 +3,7 @@ using JobApplication.Entity.Enums;
 
 namespace JobApplication.Service.Services
 {
+    // Done
     public class ProfileFactory : IProfileFactory
     {
         public ProfileBase CreateProfile(RoleEnum role)

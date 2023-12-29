@@ -3,11 +3,7 @@ using JobApplication.API.Response;
 using JobApplication.Entity.Dtos.AccountDtos;
 using JobApplication.Entity.Enums;
 using JobApplication.Service.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Net.Http;
 
 namespace JobApplication.API.Controllers
 {
@@ -40,12 +36,7 @@ namespace JobApplication.API.Controllers
 
             return new ApiResponse<UserDto>(user, 200);
         }
-        [HttpGet]
-        [AuthorizationFilter(RoleEnum.JobSeeker)]
-        public ApiResponse<string> Test()
-        {
-            return new ApiResponse<string>(200);
-        }
+        
         //[HttpGet]
         //public async Task<string> SeedCountriesAndCities()
         //{

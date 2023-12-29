@@ -17,8 +17,6 @@ public class JobSeekerProfile : ProfileBase
     public int? CountryId { get; set; }
     public CityLookup City { get; set; }
     public int? CityId { get; set; }
-    //public User User { get; set; }
-    //public int UserId { get; set; }
     public File ProfilePictureFile { get; set; }
     public int? ProfilePictureFileId { get; set; }
     public File ResumeFile { get; set; }

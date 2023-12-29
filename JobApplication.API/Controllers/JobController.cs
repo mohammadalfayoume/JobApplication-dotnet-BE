@@ -1,6 +1,9 @@
-﻿using JobApplication.API.Response;
+﻿using JobApplication.API.Filters;
+using JobApplication.API.Response;
 using JobApplication.Entity.Dtos.JobDtos;
+using JobApplication.Entity.Enums;
 using JobApplication.Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +17,7 @@ namespace JobApplication.API.Controllers
         {
         }
         [HttpPost]
+        [AuthorizationFilter(RoleEnum.Company)]
         public async Task<ApiResponse> CreateUpdateJob(CreateUpdateJobDto jobDto)
         {
             if (jobDto is null)
@@ -22,13 +26,14 @@ namespace JobApplication.API.Controllers
 
             return new ApiResponse();
         }
-        [HttpPost]
-        public async Task<ApiResponse<IEnumerable<JobsDto>>> GetCompanyJobs([FromBody] int CompanyId)
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ApiResponse<IEnumerable<JobsDto>>> GetCompanyJobs(int? companyId)
         {
-            if (CompanyId == 0)
+            if (!companyId.HasValue || companyId == 0)
                 throw new ExceptionService(400, "Invalid CompanyId");
 
-            var jobs = await CurrentService.GetCompanyJobsAsync(CompanyId);
+            var jobs = await CurrentService.GetCompanyJobsAsync((int)companyId);
             return new ApiResponse<IEnumerable<JobsDto>>(jobs);
         }
     }

@@ -6,8 +6,6 @@ using JobApplication.Entity.Lookups;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace JobApplication.Service.Services;
@@ -15,6 +13,7 @@ namespace JobApplication.Service.Services;
 public class AccountService : JobApplicationBaseService
 {
     private readonly TokenService _tokenService;
+
     public AccountService(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _tokenService = serviceProvider.GetRequiredService<TokenService>();
@@ -26,6 +25,7 @@ public class AccountService : JobApplicationBaseService
         {
             try
             {
+                
                 var isExist = await DbContext.Users.AnyAsync(x => x.Email == registerDto.Email);
 
                 if (isExist)
@@ -35,13 +35,17 @@ public class AccountService : JobApplicationBaseService
                     throw new ExceptionService(400, "Password and ConfirmPassword does not match");
 
                 var user = registerDto.Adapt<User>();
+                user.CreationDate = DateTime.Now.Date;
+
                 await DbContext.AddAsync(user);
                 await DbContext.SaveChangesAsync();
 
                 await DbContext.UserRoles.AddAsync(new UserRole
                 {
                     RoleId = registerDto.RoleId,
-                    UserId = user.Id
+                    UserId = user.Id,
+                    CreationDate = DateTime.Now.Date,
+                    CreatedById = user.Id
                 });
 
                 await DbContext.SaveChangesAsync();
@@ -51,6 +55,8 @@ public class AccountService : JobApplicationBaseService
                 var profile = profileFactory.CreateProfile((RoleEnum)registerDto.RoleId);
                 
                 profile.UserId = user.Id;
+                profile.CreationDate = DateTime.Now.Date;
+                profile.CreatedById = user.Id;
                 await DbContext.AddAsync(profile);
                 
 

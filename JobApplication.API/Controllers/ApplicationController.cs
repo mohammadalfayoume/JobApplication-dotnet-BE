@@ -1,7 +1,8 @@
-﻿using JobApplication.API.Response;
+﻿using JobApplication.API.Filters;
+using JobApplication.API.Response;
 using JobApplication.Entity.Dtos.ApplicationDtos;
+using JobApplication.Entity.Enums;
 using JobApplication.Service.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobApplication.API.Controllers;
@@ -15,22 +16,34 @@ public class ApplicationController : JobApplicationBaseController<ApplicationSer
     }
 
     [HttpPost]
-    public async Task<ApiResponse> ApplyToJob([FromForm] CreateUpdateApplicationDto applicationDto)
+    [AuthorizationFilter(RoleEnum.JobSeeker)]
+    public async Task<ApiResponse> CreateUpdateJobApplication([FromForm] CreateUpdateApplicationDto applicationDto)
     {
         if (applicationDto is null)
             throw new ExceptionService(400, "Invalid Model Data");
         
-        await CurrentService.ApplyToJobAsync(applicationDto);
+        await CurrentService.CreateUpdateApplicationAsync(applicationDto);
 
         return new ApiResponse();
     }
-    //[HttpPost]
-    //public async Task<ApiResponse<IEnumerable<ApplicationDto>>> GetJobApplications([FromBody] int jobId)
-    //{
-    //    if (jobId == 0)
-    //        throw new ExceptionService(400, "Invalid JobId");
-    //    var applications = await CurrentService.GetJobApplications(jobId);
+    [HttpGet]
+    [AuthorizationFilter(RoleEnum.Company)]
+    public async Task<ApiResponse<IEnumerable<ApplicationDto>>> GetJobApplications(int? jobId)
+    {
+        if (jobId is null)
+            throw new ExceptionService(400, "Invalid JobId");
+        var applications = await CurrentService.GetJobApplications(jobId);
 
-    //    return new ApiResponse<IEnumerable<ApplicationDto>>(applications);
-    //} 
+        return new ApiResponse<IEnumerable<ApplicationDto>>(applications);
+    }
+    [HttpGet]
+    [AuthorizationFilter(RoleEnum.JobSeeker)]
+    public async Task<ApiResponse<IEnumerable<ApplicationDto>>> JobseekerApplications(int? jobId)
+    {
+        if (jobId is null)
+            throw new ExceptionService(400, "Invalid JobId");
+
+        var applications = await CurrentService.GetJobseekerApplications(jobId);
+        return new ApiResponse<IEnumerable<ApplicationDto>>(applications);
+    }
 }

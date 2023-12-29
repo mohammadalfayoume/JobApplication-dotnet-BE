@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PDAZIqQ0KsxBd7pL4AQn4uCWiSJ/fhNnDSQ7zl4zN3yC+iaGU0RKerebAbapIX7BvRIdgC4+kDfEZQQBYL6JPA==",
+  "dgSpecHash": "WQGktyDq5/jKxpWt7eZCG1c/zMyZLFRm0iuOLgIj0o7E54YpCUfYstL5Gu0s8GwNKIqLi5QwoFwJEqWwxmKCTA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.API\\JobApplication.API.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "C:\\Users\\Mohammad\\.nuget\\packages\\mapster\\7.4.0\\mapster.7.4.0.nupkg.sha512",
     "C:\\Users\\Mohammad\\.nuget\\packages\\mapster.core\\1.2.1\\mapster.core.1.2.1.nupkg.sha512",
     "C:\\Users\\Mohammad\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.0\\microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",
+    "C:\\Users\\Mohammad\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Mohammad\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "C:\\Users\\Mohammad\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\Mohammad\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
