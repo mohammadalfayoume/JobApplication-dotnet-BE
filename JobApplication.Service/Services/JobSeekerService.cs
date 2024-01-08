@@ -52,9 +52,9 @@ public class JobSeekerService : JobApplicationBaseService
                 jobseeker.UpdatedDate = DateTime.Now.Date;
                 jobseeker.UpdatedById = userId;
 
-                var skills = await CreateUpdateSkillsAsync(jobSeekerProfile.Skills);
+                //var skills = await CreateUpdateSkillsAsync(jobSeekerProfile.Skills);
 
-                jobseeker.Skills = skills;
+                //jobseeker.Skills = skills;
 
 
                 if (jobSeekerProfile.ProfilePictureFile is not null)
@@ -154,8 +154,8 @@ public class JobSeekerService : JobApplicationBaseService
             if (skill.Id is null)
             {
                 var skillToAdd = skill.Adapt<Skill>();
-                skillToAdd.CreationDate = DateTime.Now.Date;
-                skillToAdd.CreatedById = userId;
+                //skillToAdd.CreationDate = DateTime.Now.Date;
+                //skillToAdd.CreatedById = userId;
                 await DbContext.AddAsync(skillToAdd);
                 await DbContext.SaveChangesAsync();
                 skillsToReturn.Add(skillToAdd);
@@ -166,8 +166,8 @@ public class JobSeekerService : JobApplicationBaseService
                 if (skill is null)
                     throw new ExceptionService(400, $"Skill Not Found To Update");
                 skill.Adapt(existancSkill);
-                existancSkill.UpdatedDate = DateTime.Now.Date;
-                existancSkill.UpdatedById = userId;
+                //existancSkill.UpdatedDate = DateTime.Now.Date;
+                //existancSkill.UpdatedById = userId;
                 DbContext.Update(existancSkill);
                 skillsToReturn.Add(existancSkill);
             }

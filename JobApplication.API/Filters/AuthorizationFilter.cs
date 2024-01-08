@@ -12,11 +12,11 @@ namespace JobApplication.API.Filters;
 
 public class AuthorizationFilter : Attribute, IAsyncAuthorizationFilter
 {
-    private readonly string _requiredRole;
+    private readonly List<string> _requiredRoles;
 
-    public AuthorizationFilter(RoleEnum requiredRole)
+    public AuthorizationFilter(params RoleEnum[] requiredRoles)
     {
-        _requiredRole = GeneralServices.GetEnumDisplayName(requiredRole);
+        _requiredRoles = requiredRoles.Select(role => GeneralServices.GetEnumDisplayName(role)).ToList();
     }
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
@@ -33,7 +33,7 @@ public class AuthorizationFilter : Attribute, IAsyncAuthorizationFilter
         else
         {
             var userRoles = (context.HttpContext.Items["roles"] as string)?.Split(',');
-            if (userRoles == null || !userRoles.Contains(_requiredRole.ToString()))
+            if (userRoles == null || !_requiredRoles.Any(role => userRoles.Contains(role)))
             {
                 context.Result = new ForbidResult();
             }

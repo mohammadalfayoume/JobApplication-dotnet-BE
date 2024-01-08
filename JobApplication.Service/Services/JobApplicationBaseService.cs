@@ -10,6 +10,7 @@ namespace JobApplication.Service.Services
 {
     public class JobApplicationBaseService : IJobApplicationBaseService
     {
+
         public JobApplicationBaseService(IServiceProvider serviceProvider)
         {
             DbContext = serviceProvider.GetRequiredService<StoreContext>();

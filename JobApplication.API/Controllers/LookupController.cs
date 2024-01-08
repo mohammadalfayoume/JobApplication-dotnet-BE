@@ -1,4 +1,5 @@
-﻿using JobApplication.API.Response;
+﻿using JobApplication.API.Filters;
+using JobApplication.API.Response;
 using JobApplication.Entity.Dtos;
 using JobApplication.Entity.Dtos.LookupDtos;
 using JobApplication.Entity.Enums;
@@ -13,6 +14,7 @@ namespace JobApplication.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [AuthorizationFilter(RoleEnum.JobSeeker, RoleEnum.Company)]
     public class LookupController : JobApplicationBaseController<LookupService>
     {
         public LookupController(IServiceProvider serviceProvider) : base(serviceProvider)
@@ -20,15 +22,13 @@ namespace JobApplication.API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ApiResponse<IEnumerable<CityDto>>> GetCountryCities(int countryId)
         {
             var cities = await CurrentService.GetCountryCitiesAsync(countryId);
             return new ApiResponse<IEnumerable<CityDto>>(cities);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
+        [HttpGet]
         public async Task<ApiResponse<IEnumerable<LookupDto>>> GetLookupData(LookupTypeEnum lookupType)
         {
             var lookupData = await CurrentService.GetLookupDataAsync(lookupType);

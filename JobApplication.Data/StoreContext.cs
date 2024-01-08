@@ -34,6 +34,6 @@ public class StoreContext : DbContext
     public DbSet<CountryLookup> Countries { get; set; }
     public DbSet<CityLookup> Cities { get; set; }
     public DbSet<JobTypeLookup> JobTypes { get; set; }
-
-
+    public DbSet<JobSeekerSkill> JobSeekerSkills { get; set; }
+    public DbSet<JobSkill> JobSkills { get; set; }
 }

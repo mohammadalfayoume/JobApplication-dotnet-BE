@@ -1,6 +1,7 @@
-﻿namespace JobApplication.Entity.Entities;
+﻿using JobApplication.Entity.Lookups;
 
-public class Skill : BaseEntity
+namespace JobApplication.Entity.Entities;
+
+public class Skill : BaseLookup
 {
-    public string Name { get; set; }
 }

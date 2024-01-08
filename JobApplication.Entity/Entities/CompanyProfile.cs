@@ -2,8 +2,10 @@
 
 namespace JobApplication.Entity.Entities
 {
-    public class CompanyProfile : ProfileBase
+    public class CompanyProfile : BaseEntity
     {
+        public User User { get; set; }
+        public int UserId { get; set; }
         public string CompanyName { get; set; }
         public string AboutUs { get; set; }
         public CountryLookup Country { get; set; }

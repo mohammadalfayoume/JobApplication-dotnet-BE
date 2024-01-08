@@ -2,8 +2,10 @@
 
 namespace JobApplication.Entity.Entities;
 
-public class JobSeekerProfile : ProfileBase
+public class JobSeekerProfile : BaseEntity
 {
+    public User User { get; set; }
+    public int UserId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string UniversityName { get; set; }
@@ -21,5 +23,5 @@ public class JobSeekerProfile : ProfileBase
     public int? ProfilePictureFileId { get; set; }
     public File ResumeFile { get; set; }
     public int? ResumeFileId { get; set; }
-    public ICollection<Skill> Skills { get; set; }
+    public ICollection<JobSeekerSkill> Skills { get; set; }
 }

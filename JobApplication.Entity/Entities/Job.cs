@@ -12,6 +12,6 @@ public class Job : BaseEntity
     public int JobTypeLookupId { get; set; }
     public CompanyProfile Company { get; set; }
     public int CompanyId { get; set; }
-    public ICollection<Skill> Skills { get; set; }
+    public ICollection<JobSkill> Skills { get; set; }
     public ICollection<Application> Applications { get; set; }
 }

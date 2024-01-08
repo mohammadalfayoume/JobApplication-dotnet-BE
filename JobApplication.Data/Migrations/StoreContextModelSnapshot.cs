@@ -119,6 +119,9 @@ namespace JobApplication.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CreatedById")
                         .HasColumnType("int");
 
@@ -272,6 +275,76 @@ namespace JobApplication.Data.Migrations
                     b.ToTable("JobSeekers");
                 });
 
+            modelBuilder.Entity("JobApplication.Entity.Entities.JobSeekerSkill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("JobSeekerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobSeekerId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("JobSeekerSkills");
+                });
+
+            modelBuilder.Entity("JobApplication.Entity.Entities.JobSkill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("JobSkills");
+                });
+
             modelBuilder.Entity("JobApplication.Entity.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -308,32 +381,10 @@ namespace JobApplication.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("JobSeekerProfileId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UpdatedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.HasIndex("JobSeekerProfileId");
 
                     b.ToTable("Skills");
                 });
@@ -588,17 +639,40 @@ namespace JobApplication.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("JobApplication.Entity.Entities.Skill", b =>
+            modelBuilder.Entity("JobApplication.Entity.Entities.JobSeekerSkill", b =>
                 {
-                    b.HasOne("JobApplication.Entity.Entities.Job", null)
+                    b.HasOne("JobApplication.Entity.Entities.JobSeekerProfile", "JobSeeker")
                         .WithMany("Skills")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("JobSeekerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.HasOne("JobApplication.Entity.Entities.JobSeekerProfile", null)
+                    b.HasOne("JobApplication.Entity.Entities.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobSeeker");
+
+                    b.Navigation("Skill");
+                });
+
+            modelBuilder.Entity("JobApplication.Entity.Entities.JobSkill", b =>
+                {
+                    b.HasOne("JobApplication.Entity.Entities.Job", "Job")
                         .WithMany("Skills")
-                        .HasForeignKey("JobSeekerProfileId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("JobId");
+
+                    b.HasOne("JobApplication.Entity.Entities.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+
+                    b.Navigation("Skill");
                 });
 
             modelBuilder.Entity("JobApplication.Entity.Entities.UserRole", b =>

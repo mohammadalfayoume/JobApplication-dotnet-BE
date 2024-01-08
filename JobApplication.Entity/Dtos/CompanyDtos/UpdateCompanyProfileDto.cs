@@ -5,7 +5,6 @@ namespace JobApplication.Entity.Dtos.CompanyDtos;
 
 public class UpdateCompanyProfileDto
 {
-    public int Id { get; set; }
     [Required]
     public string CompanyName { get; set; }
     public string AboutUs { get; set; }

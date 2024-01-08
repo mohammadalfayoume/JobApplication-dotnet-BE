@@ -8,9 +8,6 @@ public class JobSeekerProfileMapping : IEntityTypeConfiguration<JobSeekerProfile
 {
     public void Configure(EntityTypeBuilder<JobSeekerProfile> builder)
     {
-        //builder.Property(x => x.FirstName).IsRequired();
-        //builder.Property(x => x.LastName).IsRequired();
-        //builder.Property(x => x.UniversityName).IsRequired();
 
         builder
             .HasOne(x => x.User)
@@ -44,7 +41,8 @@ public class JobSeekerProfileMapping : IEntityTypeConfiguration<JobSeekerProfile
 
         builder
             .HasMany(x => x.Skills)
-            .WithOne()
+            .WithOne(x => x.JobSeeker)
+            .HasForeignKey(x => x.JobSeekerId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

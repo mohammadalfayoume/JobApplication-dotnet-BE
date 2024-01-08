@@ -25,9 +25,10 @@ public class JobMapping : IEntityTypeConfiguration<Job>
             .HasForeignKey(x => x.JobId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder
-            .HasMany(x => x.Skills)
-            .WithOne()
-            .OnDelete(DeleteBehavior.NoAction);
+        //builder
+        //    .HasMany(x => x.Skills)
+        //    .WithOne(x => x.Job)
+        //    .HasForeignKey(x => x.JobId)
+        //    .OnDelete(DeleteBehavior.NoAction);
     }
 }

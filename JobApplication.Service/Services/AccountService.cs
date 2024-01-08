@@ -7,6 +7,7 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JobApplication.Service.Services;
 
@@ -47,18 +48,19 @@ public class AccountService : JobApplicationBaseService
                     CreationDate = DateTime.Now.Date,
                     CreatedById = user.Id
                 });
-
+                  
                 await DbContext.SaveChangesAsync();
 
                 // Using Factory Design Pattern
-                IProfileFactory profileFactory = new ProfileFactory();
-                var profile = profileFactory.CreateProfile((RoleEnum)registerDto.RoleId);
-                
-                profile.UserId = user.Id;
-                profile.CreationDate = DateTime.Now.Date;
-                profile.CreatedById = user.Id;
-                await DbContext.AddAsync(profile);
-                
+                //IProfileFactory profileFactory = new ProfileFactory();
+                //var profile = profileFactory.CreateProfile((RoleEnum)registerDto.RoleId);
+                //profile.UserId = user.Id;
+                //profile.CreationDate = DateTime.Now.Date;
+                //profile.CreatedById = user.Id;
+                if (registerDto.RoleId == (int)RoleEnum.JobSeeker)
+                    await DbContext.AddAsync(new JobSeekerProfile { UserId = user.Id, CreationDate = DateTime.Now.Date, CreatedById = user.Id });
+                else if (registerDto.RoleId == (int)RoleEnum.Company)
+                    await DbContext.AddAsync(new CompanyProfile { UserId = user.Id, CreationDate = DateTime.Now.Date, CreatedById = user.Id });
 
                 await DbContext.SaveChangesAsync();
 

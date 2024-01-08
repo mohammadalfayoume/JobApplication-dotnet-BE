@@ -2,9 +2,11 @@
 using JobApplication.Entity.Dtos.JobDtos;
 using JobApplication.Entity.Dtos.SkillDtos;
 using JobApplication.Entity.Entities;
+using JobApplication.Entity.Lookups;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel.Design;
 
 namespace JobApplication.Service.Services;
 
@@ -22,21 +24,36 @@ public class JobService : JobApplicationBaseService
         {
             try
             {
-                var userId = _userService.GetUserId();
-                var skillsToAdd = await CreateUpdateSkillsAsync(jobDto.Skills);
+                var userId = (int)_userService.GetUserId();
+                var company = await DbContext.Companies.FirstOrDefaultAsync(x => x.UserId == userId);
                 // Create
                 if (jobDto.Id == 0)
                 {
-                    var job = jobDto.Adapt<Job>();
-                    job.Skills = skillsToAdd;
-                    job.CreationDate = DateTime.Now.Date;
-                    job.CreatedById = (int)userId;
+                    //var job = jobDto.Adapt<Job>();
+                    var job = new Job
+                    {
+                        Title = jobDto.Title,
+                        Description = jobDto.Description,
+                        YearsOfExperience = jobDto.YearsOfExperience,
+                        JobTypeLookupId = jobDto.JobTypeLookupId,
+                        CreationDate = DateTime.Now.Date,
+                        CreatedById = userId,
+                        CompanyId = company.Id
+                    };
+                    
                     await DbContext.Jobs.AddAsync(job);
+                    await DbContext.SaveChangesAsync();
+                    await CreateUpdateSkillsAsync(jobDto.Skills, job.Id);
                 }
                 // Update
                 else
                 {
-                    var job = await DbContext.Jobs.FindAsync(jobDto.Id);
+                    var job = await DbContext.Jobs
+                        .Where(x => x.Id == jobDto.Id)
+                        .Include(x => x.Skills)
+                        .ThenInclude(s => s.Skill)
+                        .FirstOrDefaultAsync();
+
                     if (job is null)
                         throw new ExceptionService(400, "Job Does Not Exist");
 
@@ -44,12 +61,11 @@ public class JobService : JobApplicationBaseService
                     job.Description = jobDto.Description;
                     job.YearsOfExperience = jobDto.YearsOfExperience;
                     job.JobTypeLookupId = jobDto.JobTypeLookupId;
-                    job.CompanyId = (int)userId;
+                    job.CompanyId = userId;
                     job.UpdatedDate = DateTime.Now.Date;
-                    job.Skills = skillsToAdd;
-                    job.UpdatedById = (int)userId;
-
+                    job.UpdatedById = userId;
                     DbContext.Jobs.Update(job);
+                    await CreateUpdateSkillsAsync(jobDto.Skills, job.Id);
                 }
                 await DbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -73,33 +89,40 @@ public class JobService : JobApplicationBaseService
         return jobsDto;
     }
     // Done
-    private async Task<List<Skill>> CreateUpdateSkillsAsync(List<SkillDto> skills)
+    private async Task CreateUpdateSkillsAsync(List<SkillDto> skills, int jobId)
     {
-        var userId = _userService.GetUserId();
-        var skillsToReturn = new List<Skill>();
+        var userId = (int)_userService.GetUserId();
         foreach (var skill in skills)
         {
 
-            if (skill.Id is null)
+            if (skill.Id == 0)
             {
                 var skillToAdd = skill.Adapt<Skill>();
-                skillToAdd.CreatedById = (int)userId;
-                await DbContext.AddAsync(skillToAdd);
-                await DbContext.SaveChangesAsync();
-                skillsToReturn.Add(skillToAdd);
+                var jobSkill = new JobSkill
+                {
+                    JobId = jobId,
+                    Skill = skillToAdd,
+                    CreatedById = userId,
+                    CreationDate = DateTime.Now.Date
+                };
+                await DbContext.AddAsync(jobSkill);
             }
             else
             {
                 var existancSkill = await DbContext.Skills.FindAsync(skill.Id);
-                if (skill is null)
+                if (existancSkill is null)
                     throw new ExceptionService(400, $"Skill Not Found To Update");
-                skill.Adapt(existancSkill);
-                existancSkill.UpdatedById = (int)userId;
-                DbContext.Update(existancSkill);
-                skillsToReturn.Add(existancSkill);
+
+                var jobSkill = new JobSkill
+                {
+                    JobId = jobId,
+                    Skill = existancSkill,
+                    UpdatedById = userId,
+                    UpdatedDate = DateTime.Now.Date
+                };
+                await DbContext.AddAsync(jobSkill);
             }
         }
-        return skillsToReturn;
     }
 
 }

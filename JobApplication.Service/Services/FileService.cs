@@ -161,7 +161,8 @@ public class FileService : JobApplicationBaseService
             FileId = file.FileId,
             Path = file.Path,
             CreatedById = userId,
-            CreationDate = DateTime.Now.Date
+            CreationDate = DateTime.Now.Date,
+            ContentType = file.File.ContentType
         };
         // Save File in the DB
         await DbContext.Files.AddAsync(fileToCreate);
@@ -176,5 +177,27 @@ public class FileService : JobApplicationBaseService
         await file.File.CopyToAsync(fileStream);
 
         return fileToCreate;
+    }
+
+    public async Task<FileDto> GetFileByIdAsync(int id)
+    {
+        var file = await DbContext.Files.FindAsync(id);
+        if (file == null)
+            throw new ExceptionService(400, "File Does Not Exist");
+
+        byte[] existingContent;
+        using (var existingFileStream = new FileStream(file.Path, FileMode.Open, FileAccess.Read))
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await existingFileStream.CopyToAsync(memoryStream);
+                existingContent = memoryStream.ToArray();
+            }
+        }
+        return new FileDto
+        {
+            Content = existingContent,
+            ContentType = file.ContentType
+        };
     }
 }

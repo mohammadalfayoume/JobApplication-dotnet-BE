@@ -29,12 +29,20 @@ public class CompanyController : JobApplicationBaseController<CompanyService>
 
     }
     [HttpGet]
-    [AllowAnonymous]
+    [AuthorizationFilter(RoleEnum.Company, RoleEnum.JobSeeker)]
     public async Task<ApiResponse<IEnumerable<CompanyDto>>> GetAllCompanies()
     {
         var companies = await CurrentService.GetAllCompaniesAsync();
 
         return new ApiResponse<IEnumerable<CompanyDto>>(companies);
+    }
+    [HttpGet]
+    [AuthorizationFilter(RoleEnum.Company)]
+    public async Task<ApiResponse<CompanyDto>> GetCompany()
+    {
+        var company = await CurrentService.GetCompanyAsync();
+
+        return new ApiResponse<CompanyDto>(company);
     }
 
 }
