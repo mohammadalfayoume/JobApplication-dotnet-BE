@@ -28,13 +28,13 @@ namespace JobApplication.API.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ApiResponse<IEnumerable<JobsDto>>> GetCompanyJobs(int? companyId)
+        public async Task<ApiResponse<IEnumerable<JobDto>>> GetCompanyJobs(int? companyId)
         {
             if (!companyId.HasValue || companyId == 0)
                 throw new ExceptionService(400, "Invalid CompanyId");
 
             var jobs = await CurrentService.GetCompanyJobsAsync((int)companyId);
-            return new ApiResponse<IEnumerable<JobsDto>>(jobs);
+            return new ApiResponse<IEnumerable<JobDto>>(jobs);
         }
     }
 }

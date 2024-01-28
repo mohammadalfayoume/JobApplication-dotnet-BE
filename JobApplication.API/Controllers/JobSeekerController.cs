@@ -16,18 +16,18 @@ namespace JobApplication.API.Controllers
         }
         [HttpPost]
         [AuthorizationFilter(RoleEnum.JobSeeker)]
-        public async Task<ApiResponse> UpdateJobSeekerProfile([FromForm] UpdateJobSeekerProfileDto companyProfile)
+        public async Task<ApiResponse> UpdateJobSeekerProfile([FromForm] UpdateJobSeekerProfileDto jobseekerProfile)
         {
-            if (companyProfile is null)
+            if (jobseekerProfile is null)
                 throw new ExceptionService(400, "Invalid Model Data");
 
-            await CurrentService.UpdateJobSeekerProfileAsync(companyProfile);
+            await CurrentService.UpdateJobSeekerProfileAsync(jobseekerProfile);
 
             return new ApiResponse(200);
 
         }
         [HttpGet]
-        [AuthorizationFilter(RoleEnum.JobSeeker)]
+        //[AuthorizationFilter(RoleEnum.JobSeeker)]
         public async Task<ApiResponse<JobSeekerDto>> GetJobSeekerById(int? jobSeekerId)
         {
             if (!jobSeekerId.HasValue || jobSeekerId == 0)

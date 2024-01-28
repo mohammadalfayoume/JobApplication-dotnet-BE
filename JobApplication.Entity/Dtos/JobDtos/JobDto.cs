@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobApplication.Entity.Dtos.JobDtos;
 
-public class JobsDto
+public class JobDto
 {
     public string Title { get; set; }
     public string Description { get; set; }
     public int YearsOfExperience { get; set; }
     public string JobType { get; set; }
-    public ICollection<SkillDto> Skills { get; set; }
+    public List<string> Skills { get; set; }
 }

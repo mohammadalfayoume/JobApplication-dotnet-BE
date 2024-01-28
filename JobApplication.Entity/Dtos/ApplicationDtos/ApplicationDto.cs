@@ -10,6 +10,6 @@ public class ApplicationDto
     public int Id { get; set; }
     public JobSeekerDto JobSeekerProfile { get; set; }
     public int JobSeekerProfileId { get; set; }
-    public JobsDto Job { get; set; }
+    public JobDto Job { get; set; }
     public int JobId { get; set; }
 }

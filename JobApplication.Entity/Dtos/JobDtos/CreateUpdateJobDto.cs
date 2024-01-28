@@ -1,6 +1,7 @@
 ﻿using JobApplication.Entity.Dtos.SkillDtos;
 using JobApplication.Entity.Entities;
 using JobApplication.Entity.Lookups;
+using Mapster;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobApplication.Entity.Dtos.JobDtos;
@@ -12,5 +13,6 @@ public class CreateUpdateJobDto
     public string Description { get; set; }
     public int YearsOfExperience { get; set; }
     public int JobTypeLookupId { get; set; }
+    [AdaptIgnore]
     public List<SkillDto> Skills { get; set; }
 }

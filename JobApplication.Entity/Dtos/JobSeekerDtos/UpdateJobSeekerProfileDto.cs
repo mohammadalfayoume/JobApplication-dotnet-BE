@@ -1,6 +1,7 @@
 ﻿using JobApplication.Entity.Dtos.SkillDtos;
 using JobApplication.Entity.Entities;
 using JobApplication.Entity.Lookups;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,6 +24,7 @@ namespace JobApplication.Entity.Dtos.JobSeekerDtos
         public int? CityId { get; set; }
         public IFormFile ProfilePictureFile { get; set; }
         public IFormFile ResumeFile { get; set; }
+        [AdaptIgnore]
         public List<SkillDto> Skills { get; set; }
     }
 }

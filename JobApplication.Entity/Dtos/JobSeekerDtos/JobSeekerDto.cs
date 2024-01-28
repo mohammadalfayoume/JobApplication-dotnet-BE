@@ -20,5 +20,5 @@ public class JobSeekerDto
     public string CityName { get; set; }
     public FileDto ProfilePictureFile { get; set; }
     public FileDto ResumeFile { get; set; }
-    public List<SkillDto> Skills { get; set; }
+    public List<string> Skills { get; set; }
 }
