@@ -11,7 +11,7 @@ namespace JobApplication.API.Controllers
     [ApiController]
     public class AccountController : JobApplicationBaseController<AccountService>
     {
-
+    
         public AccountController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
@@ -29,6 +29,7 @@ namespace JobApplication.API.Controllers
         [HttpPost]
         public async Task<ApiResponse<UserDto>> Login(LoginDto loginDto)
         {
+
             if (loginDto is null)
                 throw new ExceptionService(400, "Invalid Model Data");
 
@@ -36,7 +37,13 @@ namespace JobApplication.API.Controllers
 
             return new ApiResponse<UserDto>(user, 200);
         }
-        
+        [HttpGet]
+        public async Task<ApiResponse<UserDto>> GetUserData()
+        {
+            var user = await CurrentService.GetUserDataAsync();
+            return new ApiResponse<UserDto>(user, 200);
+        }
+
         //[HttpGet]
         //public async Task<string> SeedCountriesAndCities()
         //{

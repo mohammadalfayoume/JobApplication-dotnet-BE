@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = JobApplication.Integration
-build_property.ProjectDir = C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Integration\
+build_property.ProjectDir = C:\Users\moham\source\repos\JobApplication-dotnet-BE\JobApplication.Integration\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

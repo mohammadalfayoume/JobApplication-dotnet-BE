@@ -11,3 +11,16 @@ C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debu
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\ref\JobApplication.Entity.dll
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.csproj.AssemblyReference.cache
 C:\Users\Mohammad\source\repos\JobApplication.API\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.sourcelink.json
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\bin\Debug\net8.0\JobApplication.Entity.deps.json
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\bin\Debug\net8.0\JobApplication.Entity.dll
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\bin\Debug\net8.0\JobApplication.Entity.pdb
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.csproj.AssemblyReference.cache
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.AssemblyInfoInputs.cache
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.AssemblyInfo.cs
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.csproj.CoreCompileInputs.cache
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.sourcelink.json
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.dll
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\refint\JobApplication.Entity.dll
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\JobApplication.Entity.pdb
+C:\Users\moham\Source\Repos\JobApplication-dotnet-BE\JobApplication.Entity\obj\Debug\net8.0\ref\JobApplication.Entity.dll

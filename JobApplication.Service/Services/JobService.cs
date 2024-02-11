@@ -36,9 +36,11 @@ public class JobService : JobApplicationBaseService
                         Description = jobDto.Description,
                         YearsOfExperience = jobDto.YearsOfExperience,
                         JobTypeLookupId = jobDto.JobTypeLookupId,
-                        CreationDate = DateTime.Now.Date,
+                        CreationDate = DateTime.UtcNow.Date,
                         CreatedById = userId,
-                        CompanyId = company.Id
+                        CompanyId = company.Id,
+                        CountryId = company.CountryId,
+                        CityId = company.CityId,
                     };
                     
                     await DbContext.Jobs.AddAsync(job);
@@ -58,7 +60,7 @@ public class JobService : JobApplicationBaseService
                         throw new ExceptionService(400, "Job Does Not Exist");
 
                     jobDto.Adapt(job);
-                    job.UpdatedDate = DateTime.Now.Date;
+                    job.UpdatedDate = DateTime.UtcNow.Date;
                     job.UpdatedById = userId;
                     DbContext.Jobs.Update(job);
 
@@ -110,7 +112,7 @@ public class JobService : JobApplicationBaseService
                 JobId = jobId,
                 Skill = existedSkill is not null ? existedSkill : skill.Adapt<Skill>(),
                 CreatedById = userId,
-                CreationDate = DateTime.Now.Date
+                CreationDate = DateTime.UtcNow.Date
             };
             await DbContext.AddAsync(newJobSkill);
         }

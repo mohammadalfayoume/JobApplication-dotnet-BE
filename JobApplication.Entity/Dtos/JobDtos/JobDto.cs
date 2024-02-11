@@ -14,4 +14,6 @@ public class JobDto
     public int YearsOfExperience { get; set; }
     public string JobType { get; set; }
     public List<string> Skills { get; set; }
+    public string CountryName { get; set; }
+    public string CityName { get; set; }
 }

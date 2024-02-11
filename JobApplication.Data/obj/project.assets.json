@@ -4122,19 +4122,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Mohammad\\.nuget\\packages\\": {}
+    "C:\\Users\\moham\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Data\\JobApplication.Data.csproj",
+      "projectUniqueName": "C:\\Users\\moham\\source\\repos\\JobApplication-dotnet-BE\\JobApplication.Data\\JobApplication.Data.csproj",
       "projectName": "JobApplication.Data",
-      "projectPath": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Data\\JobApplication.Data.csproj",
-      "packagesPath": "C:\\Users\\Mohammad\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Data\\obj\\",
+      "projectPath": "C:\\Users\\moham\\source\\repos\\JobApplication-dotnet-BE\\JobApplication.Data\\JobApplication.Data.csproj",
+      "packagesPath": "C:\\Users\\moham\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\moham\\source\\repos\\JobApplication-dotnet-BE\\JobApplication.Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Mohammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\moham\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4148,8 +4148,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Entity\\JobApplication.Entity.csproj": {
-              "projectPath": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Entity\\JobApplication.Entity.csproj"
+            "C:\\Users\\moham\\source\\repos\\JobApplication-dotnet-BE\\JobApplication.Entity\\JobApplication.Entity.csproj": {
+              "projectPath": "C:\\Users\\moham\\source\\repos\\JobApplication-dotnet-BE\\JobApplication.Entity\\JobApplication.Entity.csproj"
             }
           }
         }
@@ -4201,7 +4201,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

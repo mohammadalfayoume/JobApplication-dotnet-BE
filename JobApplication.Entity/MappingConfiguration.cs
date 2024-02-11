@@ -22,6 +22,12 @@ public static class MappingConfiguration
         TypeAdapterConfig<CompanyProfile, CompanyDto>.NewConfig()
             .Map(des => des.CityName, src => src.City.Name).IgnoreNullValues(true);
 
+        TypeAdapterConfig<Job, JobDto>.NewConfig()
+            .Map(des => des.CountryName, src => src.Country.Name).IgnoreNullValues(true);
+
+        TypeAdapterConfig<Job, JobDto>.NewConfig()
+            .Map(des => des.CityName, src => src.City.Name).IgnoreNullValues(true);
+
         TypeAdapterConfig<JobSeekerProfile, JobSeekerDto>.NewConfig()
            .Map(des => des.CountryName, src => src.Country.Name)
            .Map(dest => dest.Skills, src => src.Skills.Select(x => x.Skill.Name))

@@ -14,4 +14,8 @@ public class Job : BaseEntity
     public int CompanyId { get; set; }
     public ICollection<JobSkill> Skills { get; set; }
     public ICollection<Application> Applications { get; set; }
+    public CountryLookup Country { get; set; }
+    public int? CountryId { get; set;}
+    public CityLookup City { get; set; }
+    public int? CityId { get; set; }
 }

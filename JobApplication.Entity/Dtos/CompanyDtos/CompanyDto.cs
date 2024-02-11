@@ -4,6 +4,7 @@ namespace JobApplication.Entity.Dtos.CompanyDtos;
 
 public class CompanyDto
 {
+    public int Id { get; set; }
     public string CompanyName { get; set; }
     public string AboutUs { get; set; }
     public string CountryName { get; set; }

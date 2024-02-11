@@ -172,19 +172,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Mohammad\\.nuget\\packages\\": {}
+    "C:\\Users\\moham\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Entity\\JobApplication.Entity.csproj",
+      "projectUniqueName": "C:\\Users\\moham\\Source\\Repos\\JobApplication-dotnet-BE\\JobApplication.Entity\\JobApplication.Entity.csproj",
       "projectName": "JobApplication.Entity",
-      "projectPath": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Entity\\JobApplication.Entity.csproj",
-      "packagesPath": "C:\\Users\\Mohammad\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mohammad\\source\\repos\\JobApplication.API\\JobApplication.Entity\\obj\\",
+      "projectPath": "C:\\Users\\moham\\Source\\Repos\\JobApplication-dotnet-BE\\JobApplication.Entity\\JobApplication.Entity.csproj",
+      "packagesPath": "C:\\Users\\moham\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\moham\\Source\\Repos\\JobApplication-dotnet-BE\\JobApplication.Entity\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Mohammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\moham\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -235,7 +235,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

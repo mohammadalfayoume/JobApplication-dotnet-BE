@@ -6,6 +6,7 @@ using JobApplication.Entity.Lookups;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -14,10 +15,12 @@ namespace JobApplication.Service.Services;
 public class AccountService : JobApplicationBaseService
 {
     private readonly TokenService _tokenService;
+    private readonly UserService _userService;
 
     public AccountService(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _tokenService = serviceProvider.GetRequiredService<TokenService>();
+        _userService = serviceProvider.GetRequiredService<UserService>();
     }
     // Done
     public async Task<UserDto> RegisterAsync(RegisterDto registerDto)
@@ -115,7 +118,7 @@ public class AccountService : JobApplicationBaseService
                 {
                     // Seed country
                     var countryEntity = new CountryLookup { Name = countries[i].Name };
-                    await DbContext.AddAsync(countryEntity);
+                    await DbContext.Countries.AddAsync(countryEntity);
                     await DbContext.SaveChangesAsync();
 
                     // Seed cities with the associated country
@@ -173,6 +176,23 @@ public class AccountService : JobApplicationBaseService
             }
 
         }
+    }
+
+    public async Task<UserDto> GetUserDataAsync()
+    {
+        var userId = _userService.GetUserId();
+
+        var user = await DbContext.Users.Select(x => new User
+        {
+            Email = x.Email,
+            UserRoles = x.UserRoles.Select(x => new UserRole { Role = x.Role, RoleId = x.RoleId }).ToList(),
+            Id = x.Id,
+        }).FirstOrDefaultAsync(x => x.Id == userId);
+
+        var roles = string.Join(',', user.UserRoles.Select(x => x.Role.Name));
+        var userDto = user.Adapt<UserDto>();
+        userDto.Roles = roles;
+        return userDto;
     }
 
 }

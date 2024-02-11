@@ -13,6 +13,8 @@ public class CreateUpdateJobDto
     public string Description { get; set; }
     public int YearsOfExperience { get; set; }
     public int JobTypeLookupId { get; set; }
+    public int CountryId { get; set; }
+    public int CityId { get; set; }
     [AdaptIgnore]
     public List<SkillDto> Skills { get; set; }
 }
