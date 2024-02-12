@@ -27,7 +27,7 @@ public class JobService : JobApplicationBaseService
                 var userId = (int)_userService.GetUserId();
                 var company = await DbContext.Companies.FirstOrDefaultAsync(x => x.UserId == userId);
                 // Create
-                if (jobDto.Id == 0)
+                if (jobDto.Id == 0 || jobDto.Id is null)
                 {
                     //var job = jobDto.Adapt<Job>();
                     var job = new Job
@@ -39,8 +39,8 @@ public class JobService : JobApplicationBaseService
                         CreationDate = DateTime.UtcNow.Date,
                         CreatedById = userId,
                         CompanyId = company.Id,
-                        CountryId = company.CountryId,
-                        CityId = company.CityId,
+                        CountryId = jobDto.CountryId,
+                        CityId = jobDto.CityId,
                     };
                     
                     await DbContext.Jobs.AddAsync(job);
@@ -81,6 +81,8 @@ public class JobService : JobApplicationBaseService
     {
         var jobs = await DbContext.Jobs.Where(x => x.CompanyId == companyId)
             .Include(x => x.JobTypeLookup)
+            .Include(x => x.Country)
+            .Include(x => x.City)
             .Include(x => x.Skills).ThenInclude(x => x.Skill)
             .AsNoTracking()
             .ToListAsync();

@@ -2,6 +2,7 @@
 using JobApplication.API.Response;
 using JobApplication.Entity.Dtos;
 using JobApplication.Entity.Dtos.LookupDtos;
+using JobApplication.Entity.Dtos.SkillDtos;
 using JobApplication.Entity.Enums;
 using JobApplication.Entity.Lookups;
 using JobApplication.Service.Services;
@@ -36,6 +37,12 @@ namespace JobApplication.API.Controllers
             return new ApiResponse<IEnumerable<LookupDto>>(lookupData);
         }
 
+        [HttpGet]
+        public async Task<ApiResponse<IEnumerable<SkillDto>>> GetSkills()
+        {
+            var skills = await CurrentService.GetSkillsAsync();
+            return new ApiResponse<IEnumerable<SkillDto>>(skills);
+        }
         
     }
 }

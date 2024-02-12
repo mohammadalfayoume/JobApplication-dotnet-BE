@@ -14,27 +14,22 @@ public static class MappingConfiguration
         TypeAdapterConfig<Job, JobDto>.NewConfig()
             .Map(dest => dest.JobType, src => src.JobTypeLookup.Name)
             .Map(dest => dest.Skills, src => src.Skills.Select(x => x.Skill.Name))
+            .Map(des => des.CountryName, src => src.Country.Name)
+            .Map(des => des.CityName, src => src.City.Name)
             .IgnoreNullValues(true);
 
         TypeAdapterConfig<CompanyProfile, CompanyDto>.NewConfig()
-            .Map(des => des.CountryName, src => src.Country.Name).IgnoreNullValues(true);
+            .Map(des => des.CountryName, src => src.Country.Name)
+            .Map(des => des.CityName, src => src.City.Name)
+            .IgnoreNullValues(true);
 
-        TypeAdapterConfig<CompanyProfile, CompanyDto>.NewConfig()
-            .Map(des => des.CityName, src => src.City.Name).IgnoreNullValues(true);
-
-        TypeAdapterConfig<Job, JobDto>.NewConfig()
-            .Map(des => des.CountryName, src => src.Country.Name).IgnoreNullValues(true);
-
-        TypeAdapterConfig<Job, JobDto>.NewConfig()
-            .Map(des => des.CityName, src => src.City.Name).IgnoreNullValues(true);
 
         TypeAdapterConfig<JobSeekerProfile, JobSeekerDto>.NewConfig()
            .Map(des => des.CountryName, src => src.Country.Name)
+           .Map(des => des.CityName, src => src.City.Name)
            .Map(dest => dest.Skills, src => src.Skills.Select(x => x.Skill.Name))
            .IgnoreNullValues(true);
 
-        TypeAdapterConfig<JobSeekerProfile, JobSeekerDto>.NewConfig()
-            .Map(des => des.CityName, src => src.City.Name).IgnoreNullValues(true);
 
         TypeAdapterConfig<SkillDto, Skill>.NewConfig()
             .Map(des => des.Name, src => src.Name.ToLower()).IgnoreNullValues(true);

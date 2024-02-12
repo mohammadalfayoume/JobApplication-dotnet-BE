@@ -2,6 +2,7 @@
 
 using JobApplication.Entity.Dtos;
 using JobApplication.Entity.Dtos.LookupDtos;
+using JobApplication.Entity.Dtos.SkillDtos;
 using JobApplication.Entity.Enums;
 using JobApplication.Entity.Lookups;
 using Mapster;
@@ -38,5 +39,11 @@ public class LookupService : JobApplicationBaseService
 
         var result = lookupData.Select(x => new LookupDto { Id = x.Id, Name = x.Name });
         return result;
+    }
+
+    public async Task<IEnumerable<SkillDto>> GetSkillsAsync()
+    {
+        var skills = await DbContext.Skills.AsNoTracking().ToListAsync();
+        return skills.Adapt<IEnumerable<SkillDto>>();
     }
 }
